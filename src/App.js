@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import './App.css';
+import AddMovie from './components/addMovie/AddMovie';
+import Filter from './components/filter/Filter';
+import MovieList from './components/movieList/MovieList';
+
 
 function App() {
+  const { moviesData } = useSelector((state) => (state))
+  const [ search, setSearch ] = useState("");
+  const [ratfil,setRatfil]=useState(1);
+  const handleChange =(e)=>{
+    setSearch(e.target.value)
+  }
+  const handleRating =(x) =>{
+    setRatfil(x)
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Filter search={search} handleChange={handleChange} fil={ratfil} handleRating={handleRating}/>
+      <MovieList moviesData={moviesData.filter(el=>el.name.trim().toLowerCase().includes(search.trim().toLowerCase()) && el.rating >= ratfil)}/>
+      <AddMovie/>
+      
     </div>
   );
 }
